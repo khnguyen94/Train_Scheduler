@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+
+    <!-- Link Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+      integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+      crossorigin="anonymous"
+    />
+
+    <!-- Link Custom CSS -->
+    <link rel="stylesheet" href="../Train_Scheduler/assets/css/style.css" />
+
+    <!-- Firebase CDN -->
+    <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-database.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <br />
+
+      <div class="jumbotron">
+        <h1>
+          Coyote's Train Scheduler
+        </h1>
+
+        <div id="title-gif-container" class="container">
+          <img
+            src="../Train_Scheduler/assets/images/Coyote-Train.gif"
+            alt="Coyote Train GIF"
+          />
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3>Current Train Schedule</h3>
+        </div>
+
+        <div class="panel-body">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Train Name</th>
+                <th scope="col">Destination</th>
+                <th scope="col">Frequency</th>
+                <th scope="col">Next Arrival</th>
+                <th scope="col">Minutes Away</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <br />
+
+    <div class="container">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3>Add Train</h3>
+        </div>
+
+        <div class="panel-body">
+          <form>
+            <div class="form-group">
+              <label for="name">Train Name</label>
+              <input
+                id="new-train-name"
+                type="name"
+                class="form-control"
+                placeholder="Enter new train name"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="name">Destination</label>
+              <select
+              id="new-train-destination"
+              class="form-control"
+            >
+              <option>- Select -</option>
+
+            </select>
+            </div>
+
+            <div class="form-group">
+              <label for="new-train-first-time"
+                >First Train Time (HH:mm - military time)</label
+              >
+              <input
+                id="new-train-first-time"
+                type="date"
+                class="form-control"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="new-train-frequency">New Train Frequency</label>
+              <input
+                id="new-train-frequency"
+                type="number"
+                class="form-control"
+                placeholder="Enter new train frequency rate"
+              />
+            </div>
+
+            <button
+              id="new-employee-submit"
+              type="submit"
+              class="btn btn-primary"
+            >
+              Submit
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Link JQuery CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Link Custom JS -->
+    <script src="../Train_Scheduler/assets/javascript/app.js"></script>
+  </body>
+</html>

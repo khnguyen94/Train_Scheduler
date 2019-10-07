@@ -89,14 +89,6 @@ $("#new-train-submit").on("click", function(event) {
   // Create newTrain object
   let newTrain = new Object();
 
-  // Create newTrain property variables
-  var newTrainName = "";
-  var newTrainDestination = "";
-  var newTrainFirstTime = "";
-  var newTrainFrequency = "";
-  var newTrainNextArrival;
-  var newTrainMinutesAway;
-
   // Console log to confirm newTrain object was created
   console.log("New train object successfully created");
 
@@ -115,29 +107,17 @@ $("#new-train-submit").on("click", function(event) {
     .val()
     .trim();
 
-  // Create a newTrain string object
-  var newTrainString = JSON.stringify(newTrain);
-
   // Console log newTrainString
-  console.log(newTrainString);
+  console.log(newTrain);
 
   // Save newTrain form inputs to firebase database
-  database.ref().push({
-    newTrainName: newTrainName,
-    newTrainDestination: newTrainDestination,
-    newTrainFirstTime: newTrainFirstTime,
-    newTrainFrequency: newTrainFrequency,
-    dateAdded: firebase.database.ServerValue.TIMESTAMP
-  });
+  database.ref().push(newTrain);
 
   // Clear all the form-input fields
   $("#new-train-name-input").val("");
   $("#new-train-destination-input").val("");
   $("#new-train-first-time-input").val("");
   $("#new-train-frequency-input").val("");
-
-  // Run renderLocations
-  renderLocations();
 });
 
 // Read data from database, automatically updates on initial data and then on further creation of new child objects in the database
@@ -156,6 +136,51 @@ database.ref().on(
     console.log(snapVal.newTrainFirstTime);
     console.log(snapVal.newTrainFrequency);
 
+    // Calculate
+
+    // Calculate Next Arrival
+    function calcNextArrival() {
+      var currentTime = moment().format("HH:mm");
+
+      console.log("TIME-1: ", moment());
+      console.log("TIME-2: ", currentTime);
+
+      snapVal.newTrainFrequency;
+
+      // Reading moment, tell moment what it is receiving
+
+      var newTrainFirstTime = moment(snapVal.newTrainFirstTime, "HH:mm")
+      
+      console.log("Time-3: " + moment(snapVal.newTrainFirstTime, "HH:mm"));
+      console.log("Time-4: " + moment());
+
+      // divide current time by interval, leftover will be next arrival, just need to convert it into minutes
+      // Calculate difference between current and first time
+      // if difference is negative, then the next train is the first train, only need to calculate time between now and next train
+      var minutesPassed = moment().diff(newTrainFirstTime);
+  
+      // Reformat moment diff
+      var formattedDiff = moment(minutesPassed).format("mm");
+
+      console.log(minutesPassed);
+      console.log(formattedDiff);
+
+      // Divide difference by the frequency
+      var remainingMins = formattedDiff % parseInt(snapVal.newTrainFrequency);
+
+      console.log(remainingMins);
+
+      // Calculate next arrival, current time + remainingMins
+        var nextArrival = moment().add(remainingMins, "m").format("HH:mm");
+
+        console.log(nextArrival);
+    }
+
+    calcNextArrival();
+
+    // Calculate Minutes away
+
+
     // Create a new newTrainRow object
     var newTrainRow = $("<tr>");
 
@@ -166,17 +191,25 @@ database.ref().on(
     newTrainRowName.text(snapVal.newTrainName);
 
     // Create a new td div for destination
-    // Set the text to be the destination of the new train's 
+    // Set the text to be the destination of the new train's
     var newTrainRowDestination = $("<td>");
     newTrainRowDestination.text(snapVal.newTrainDestination);
 
     // Create a new td div for frequency
-    // Set the text to be the frequency of the new train 
+    // Set the text to be the frequency of the new train
     var newTrainRowFrequency = $("<td>");
     newTrainRowFrequency.text(snapVal.newTrainFrequency);
 
+    // Create new td divs for next arrival and mins remaining
+
     // Append the new train's name, destination and frequency to the newTrainRow
-    newTrainRow.append(newTrainRowName, newTrainRowDestination, newTrainRowFrequency);
+    newTrainRow.append(
+      newTrainRowName,
+      newTrainRowDestination,
+      newTrainRowFrequency
+
+      // add next arrival and mins remaining
+    );
 
     console.log(newTrainRow);
 
@@ -189,10 +222,3 @@ database.ref().on(
     console.log("The read failed: " + errorObject.code);
   }
 );
-
-// Function to renderTrains from Firebase database
-function renderTrains() {
-    // For loop that iterates through 
-};
-
-

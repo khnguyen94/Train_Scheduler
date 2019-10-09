@@ -136,10 +136,12 @@ database.ref().on(
     console.log(snapVal.newTrainFirstTime);
     console.log(snapVal.newTrainFrequency);
 
-    // Calculate
+    // Establish next arrival and remaining mins variables
+    var remainingMins;
+    var nextArrival;
 
-    // Calculate Next Arrival
-    function calcNextArrival() {
+    // Calculate Next Arrival & Remaining Mins
+    function calcNextArrivalandMinsRemaining() {
       var currentTime = moment().format("HH:mm");
 
       console.log("TIME-1: ", moment());
@@ -149,8 +151,8 @@ database.ref().on(
 
       // Reading moment, tell moment what it is receiving
 
-      var newTrainFirstTime = moment(snapVal.newTrainFirstTime, "HH:mm")
-      
+      var newTrainFirstTime = moment(snapVal.newTrainFirstTime, "HH:mm");
+
       console.log("Time-3: " + moment(snapVal.newTrainFirstTime, "HH:mm"));
       console.log("Time-4: " + moment());
 
@@ -158,7 +160,7 @@ database.ref().on(
       // Calculate difference between current and first time
       // if difference is negative, then the next train is the first train, only need to calculate time between now and next train
       var minutesPassed = moment().diff(newTrainFirstTime);
-  
+
       // Reformat moment diff
       var formattedDiff = moment(minutesPassed).format("mm");
 
@@ -166,20 +168,18 @@ database.ref().on(
       console.log(formattedDiff);
 
       // Divide difference by the frequency
-      var remainingMins = formattedDiff % parseInt(snapVal.newTrainFrequency);
-
-      console.log(remainingMins);
+      remainingMins = formattedDiff % parseInt(snapVal.newTrainFrequency);
 
       // Calculate next arrival, current time + remainingMins
-        var nextArrival = moment().add(remainingMins, "m").format("HH:mm");
-
-        console.log(nextArrival);
+      nextArrival = moment()
+        .add(remainingMins, "m")
+        .format("HH:mm");
     }
 
-    calcNextArrival();
+    calcNextArrivalandMinsRemaining();
 
-    // Calculate Minutes away
-
+    console.log(remainingMins);
+    console.log(nextArrival);
 
     // Create a new newTrainRow object
     var newTrainRow = $("<tr>");
@@ -200,13 +200,23 @@ database.ref().on(
     var newTrainRowFrequency = $("<td>");
     newTrainRowFrequency.text(snapVal.newTrainFrequency);
 
-    // Create new td divs for next arrival and mins remaining
+    // Create new td div for next arrival
+    // Set the text to be the next arrival of the new train
+    var newTrainRowNextArrival = $("<td>");
+    newTrainRowNextArrival.text(remainingMins);
+
+    // Create new td div for mins remaining
+    // Set the text to be the mins remaining of the new train
+    var newTrainRowMinsRemaining = $("<td>");
+    newTrainRowMinsRemaining.text(nextArrival);
 
     // Append the new train's name, destination and frequency to the newTrainRow
     newTrainRow.append(
       newTrainRowName,
       newTrainRowDestination,
-      newTrainRowFrequency
+      newTrainRowFrequency, 
+      newTrainRowNextArrival, 
+      newTrainRowMinsRemaining
 
       // add next arrival and mins remaining
     );

@@ -167,14 +167,23 @@ database.ref().on(
       console.log(minutesPassed);
       console.log(formattedDiff);
 
-      // Divide difference by the frequency
-      remainingMins = formattedDiff % parseInt(snapVal.newTrainFrequency);
+      // Create an if statement for when the difference between first train and current time is negative (when the current time is before the first train time), then you make the next arrival the first train time and the remaining minutes is the difference between the current time and the first train time
+      if (formattedDiff < 0) {
+        nextArrival = snapVal.newTrainFirstTime;
+        remainingMins = moment().diff(snapVal.newTrainFirstTime).format("HH;mm");
+      }
 
-      // Calculate next arrival, current time + remainingMins
-      nextArrival = moment()
-        .add(remainingMins, "m")
-        .format("HH:mm");
-    }
+      // If the difference is positive calculate as you would regularly
+      else {
+        // Divide difference by the frequency
+        remainingMins = formattedDiff % parseInt(snapVal.newTrainFrequency);
+
+        // Calculate next arrival, current time + remainingMins
+        nextArrival = moment()
+          .add(remainingMins, "m")
+          .format("HH:mm");
+      }
+    };
 
     calcNextArrivalandMinsRemaining();
 
@@ -214,8 +223,8 @@ database.ref().on(
     newTrainRow.append(
       newTrainRowName,
       newTrainRowDestination,
-      newTrainRowFrequency, 
-      newTrainRowNextArrival, 
+      newTrainRowFrequency,
+      newTrainRowNextArrival,
       newTrainRowMinsRemaining
 
       // add next arrival and mins remaining
